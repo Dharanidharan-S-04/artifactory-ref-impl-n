@@ -199,7 +199,7 @@ COPY ./configure.sh ${work_dir}/
 
 COPY pom.xml ${work_dir}/
 
-RUN cd ${work_dir} && mvn dependency:resolve && mvn clean install
+RUN cd ${work_dir} && mvn dependency:resolve -X && mvn clean install -X
 
 RUN bash configure.sh
 
