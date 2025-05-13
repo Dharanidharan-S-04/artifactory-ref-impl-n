@@ -199,7 +199,12 @@ COPY ./configure.sh ${work_dir}/
 
 COPY pom.xml ${work_dir}/
 
-RUN cd ${work_dir} && mvn dependency:resolve -X && mvn clean install -X
+
+RUN cd ${work_dir} && \
+ export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 && \
+ export PATH=$JAVA_HOME/bin:$PATH && \
+ mvn dependency:resolve -X && mvn clean install -X
+# RUN cd ${work_dir} && mvn dependency:resolve -X && mvn clean install -X
 
 RUN bash configure.sh
 
