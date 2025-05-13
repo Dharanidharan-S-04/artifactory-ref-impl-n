@@ -36,11 +36,13 @@ useradd -u ${container_user_uid} -g ${container_user_group} -s /bin/sh -m ${cont
 
 COPY ./nginx.conf /etc/nginx/nginx.conf
 
-ENV MAVEN_HOME /usr/local/maven
-ENV PATH $MAVEN_HOME/bin:$PATH
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
-ENV PATH=$MAVEN_HOME/bin:$JAVA_HOME/bin:$PATH
+# ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
+# ENV MAVEN_HOME /usr/local/maven
+# ENV PATH $MAVEN_HOME/bin:$PATH
 
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 \
+    MAVEN_HOME=/usr/local/maven \
+    PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH
 
 # set working directory for the user
 WORKDIR /home/${container_user}
@@ -201,15 +203,7 @@ COPY ./configure.sh ${work_dir}/
 
 COPY pom.xml ${work_dir}/
 
-# RUN cd ${work_dir} && mvn dependency:resolve && mvn clean install
-
-# Debugging: Check if JAVA_HOME is set properly
-RUN echo "JAVA_HOME is set to $JAVA_HOME" && java -version
-
-# Run Maven commands to resolve dependencies and build
-RUN export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 && \
-    export PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH && \
-    mvn dependency:resolve -X && mvn clean install -X
+RUN cd ${work_dir} && mvn dependency:resolve && mvn clean install
 
 RUN bash configure.sh
 
