@@ -36,13 +36,9 @@ useradd -u ${container_user_uid} -g ${container_user_group} -s /bin/sh -m ${cont
 
 COPY ./nginx.conf /etc/nginx/nginx.conf
 
-# ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
-# ENV MAVEN_HOME /usr/local/maven
-# ENV PATH $MAVEN_HOME/bin:$PATH
-
-ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 \
-    MAVEN_HOME=/usr/local/maven \
-    PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH
+ENV MAVEN_HOME /usr/local/maven
+ENV PATH $MAVEN_HOME/bin:$PATH
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
 
 # set working directory for the user
 WORKDIR /home/${container_user}
